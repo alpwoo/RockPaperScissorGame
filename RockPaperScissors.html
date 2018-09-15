@@ -7,7 +7,83 @@
 </head>
 <body>
 
+    <div id="container">
+        <h1>Rock Paper Scissor Game</h1>
+        <button id="rock">Rock</button>
+        <button id="paper">Paper</button>
+        <button id="scissor">Scissor</button>
+    </div>
+
+    <div id="results">
+
+    </div>
+
+
   <script>
+
+    let playerWins = 0;
+    let computerWins = 0;
+    let roundCounter = 0;
+    // buttons is a node list. It looks and acts much like an array.
+    const buttons = document.querySelectorAll('button');
+
+    // we use the .forEach method to iterate through each button
+    buttons.forEach((button) => 
+    {
+
+        // and for each one we add a 'click' listener
+        button.addEventListener('click', checkResult);
+    });
+
+    const results = document.querySelector('#results');
+    const roundResult = document.createElement('p');
+    roundResult.classList.add('roundResult');
+    roundResult.textContent='No rounds played yet.';
+    results.appendChild(roundResult);    
+    const gameStatus = document.createElement('p');
+    gameStatus.classList.add('gameStatus');
+    gameStatus.textContent='Player ' + playerWins + ' Computer ' + computerWins;
+    results.appendChild(gameStatus);    
+    const gameResult = document.createElement('p');
+    gameResult.classList.add('gameResult');
+    gameResult.textContent=' ';
+    results.appendChild(gameResult);    
+
+    function checkResult(eventRef)
+    {
+        if (roundCounter == 0)
+            gameResult.textContent=' ';
+
+        resultString = playRound(eventRef, computerPlay());
+
+        if (resultString.includes("win"))
+            ++playerWins;
+        else if (resultString.includes("lose"))
+            ++computerWins;
+
+        ++roundCounter;
+
+        roundResult.textContent='Round ' + roundCounter + ': ' + resultString;
+        gameStatus.textContent='Player ' + playerWins + ' Computer ' + computerWins;
+        if (playerWins > 4)
+        {
+            gameResult.textContent=' Player wins game!';
+            resetCounters();
+        }
+        else if (computerWins > 4)
+        {
+            gameResult.textContent=' Computer wins game!';
+            resetCounters();
+        }
+    }
+  
+    function resetCounters()
+    {
+        playerWins = 0;
+        computerWins = 0;
+        roundCounter = 0;
+    }
+
     function getRandomInt (min, max)
     {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -64,32 +140,6 @@
        }
    }        
    
-   function game ()
-   {
-       let winCount = 0;
-       const maxGames = 5;
-       let gameCount;
-       let resultString;
-
-       for (gameCount = 0; gameCount < maxGames; ++gameCount)
-       {
-            resultString = playRound(playerInput(), computerPlay());
-
-            if (resultString.includes("win"))
-                ++winCount;
-            else if (resultString.includes("lose"))
-                --winCount;
-
-            console.log(resultString);
-       }
-
-       if (winCount > 0)
-            console.log ("You win at the end!");
-       else if (winCount < 0)
-           console.log ("Computer wins at the end!");
-       else
-            console.log ("Game is tied at the end!")
-   }
-  </script>
+   </script>
 </body>
 </html>
